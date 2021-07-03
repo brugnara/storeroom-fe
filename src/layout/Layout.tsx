@@ -11,6 +11,6 @@ export class Layout extends React.Component {
                 <Header />
                 <Body />
             </Container>
-        )
+        );
     }
 }

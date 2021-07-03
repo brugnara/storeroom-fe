@@ -1,14 +1,12 @@
 import React from 'react';
 
 import Navbar from 'react-bootstrap/Navbar';
-import Button from 'react-bootstrap/Button';
 import { connect } from 'react-redux';
 import store, { IState } from '../Store';
 import { boundMethod } from 'autobind-decorator';
 import Nav from 'react-bootstrap/Nav';
 import { IUser } from '../reducers/user';
-import {faUserCircle} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {Link} from 'react-router-dom';
 
 export interface IHeaderProps {
     user: IUser;
@@ -19,30 +17,43 @@ export class HeaderComponent extends React.Component<IHeaderProps> {
     private onClick(): void {
         store.dispatch({
             type: 'login',
-            data: true,
+            data: {
+                name: 'pippo',
+            },
         });
     }
 
     private renderUserInfo(): React.ReactNode {
+        let link = <Link to='/signup'>Signup</Link>;
+
         if (this.props.user.loggedIn) {
-            return <FontAwesomeIcon icon={faUserCircle}/>;
+            link = <Link to='/me'>{this.props.user.name}</Link>;
         }
 
-        return (
-            <Button onClick={this.onClick}>Login</Button>
-        );
+        return <Nav.Item>
+            <Nav.Link as='span'>
+                {link}
+            </Nav.Link>
+        </Nav.Item>;
     }
 
     public render(): React.ReactNode {
         return (
             <Navbar bg="dark" variant="dark">
-                <Navbar.Brand href="#home">Navbar</Navbar.Brand>
-                <Nav className="mr-auto ">
-                    <Nav.Link href="#home">Home</Nav.Link>
-                    <Nav.Link href="#features">Features</Nav.Link>
-                    <Nav.Link href="#pricing">Pricing</Nav.Link>
+                <Navbar.Brand href="/">StoreRoom</Navbar.Brand>
+                <Nav className="ml-auto ">
+                    <Nav.Item>
+                        <Nav.Link as='span'>
+                            <Link to='/items'>Items</Link>
+                        </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link as='span'>
+                            <Link to='/privacy'>Privacy</Link>
+                        </Nav.Link>
+                    </Nav.Item>
+                    {this.renderUserInfo()}
                 </Nav>
-                {this.renderUserInfo()}
             </Navbar>
         );
     }
